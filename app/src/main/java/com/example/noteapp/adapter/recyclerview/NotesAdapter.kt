@@ -93,22 +93,38 @@ class NotesAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(DiffCallback
         }
     }
 
-    fun pinnedSorting(list: List<Note>) {
+    fun pinnedSorting(list: List<Note>, isGridLayout: Boolean) {
         adapterScope.launch {
             val pinned = list.filter { it.pinned }
             val notPinned = list.filterNot { it.pinned }
             val finalList: List<DataItem> =
-                if (pinned.isNotEmpty() && notPinned.isNotEmpty()) {
-                    listOf(DataItem.Header("Pinned")) + pinned.map { DataItem.NoteItem(it) } + listOf(
-                        DataItem.Header("Others")
-                    ) + notPinned.map {
-                        DataItem.NoteItem(it)
+                if (isGridLayout) {
+                    if (pinned.isNotEmpty() && notPinned.isNotEmpty()) {
+                        listOf(DataItem.Header("Pinned")) + listOf(DataItem.Header("")) +
+                                pinned.map { DataItem.NoteItem(it) } +
+                                listOf(DataItem.Header("Others")) + listOf(DataItem.Header("")) +
+                                notPinned.map { DataItem.NoteItem(it) }
+                    } else if (pinned.isNotEmpty()) {
+                        listOf(DataItem.Header("Pinned")) +
+                                listOf(DataItem.Header("")) +
+                                pinned.map { DataItem.NoteItem(it) }
+                    } else {
+                        notPinned.map { DataItem.NoteItem(it) }
                     }
-                } else if (pinned.isNotEmpty()) {
-                    listOf(DataItem.Header("Pinned")) + pinned.map { DataItem.NoteItem(it) }
                 } else {
-                    notPinned.map { DataItem.NoteItem(it) }
+                    if (pinned.isNotEmpty() && notPinned.isNotEmpty()) {
+                        listOf(DataItem.Header("Pinned")) +
+                                pinned.map { DataItem.NoteItem(it) } +
+                                listOf(DataItem.Header("Others")) +
+                                notPinned.map { DataItem.NoteItem(it) }
+                    } else if (pinned.isNotEmpty()) {
+                        listOf(DataItem.Header("Pinned")) +
+                                pinned.map { DataItem.NoteItem(it) }
+                    } else {
+                        notPinned.map { DataItem.NoteItem(it) }
+                    }
                 }
+
             withContext(Dispatchers.Main) {
                 submitList(finalList)
             }

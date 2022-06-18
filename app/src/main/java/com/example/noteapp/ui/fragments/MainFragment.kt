@@ -45,8 +45,14 @@ class MainFragment : Fragment() {
         setListeners()
         setupRecyclerView()
 
-        noteViewModel.allNotes.observe(viewLifecycleOwner) {
-            notesAdapter.pinnedSorting(it)
+        noteViewModel.allNotes.observe(viewLifecycleOwner) { data ->
+            notesAdapter.pinnedSorting(data, isGridLayoutManager)
+            binding.viewType.setOnClickListener {
+                isGridLayoutManager = !isGridLayoutManager
+                notesAdapter.pinnedSorting(data, isGridLayoutManager)
+                chooseRecyclerViewLayout()
+                chooseLayoutIcon()
+            }
         }
     }
 
@@ -54,12 +60,6 @@ class MainFragment : Fragment() {
         binding.newNote.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToAddNoteFragment()
             findNavController().navigate(action)
-        }
-
-        binding.viewType.setOnClickListener { v ->
-            isGridLayoutManager = !isGridLayoutManager
-            chooseRecyclerViewLayout()
-            chooseLayoutIcon()
         }
     }
 
@@ -84,9 +84,6 @@ class MainFragment : Fragment() {
         } else {
             binding.viewType.setImageResource(R.drawable.ic_list_view)
         }
-
-//        notesAdapter.notifyItemRangeChanged(0, notesAdapter.itemCount)
-
     }
 
     override fun onDestroy() {
