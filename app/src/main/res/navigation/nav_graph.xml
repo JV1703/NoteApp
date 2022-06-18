@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_host"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.noteapp.ui.fragments.MainFragment"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_addNoteFragment"
+            app:destination="@id/addNoteFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_updateNoteFragment"
+            app:destination="@id/updateNoteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNoteFragment"
+        android:name="com.example.noteapp.ui.fragments.notefragment.AddNoteFragment"
+        android:label="AddNoteFragment" >
+        <action
+            android:id="@+id/action_addNoteFragment_to_noteBottomSheetFragment"
+            app:destination="@id/noteBottomSheetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateNoteFragment"
+        android:name="com.example.noteapp.ui.fragments.notefragment.UpdateNoteFragment"
+        android:label="UpdateNoteFragment" >
+        <argument
+            android:name="note"
+            app:argType="com.example.noteapp.data.local.model.Note" />
+        <action
+            android:id="@+id/action_updateNoteFragment_to_noteBottomSheetFragment"
+            app:destination="@id/noteBottomSheetFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/noteBottomSheetFragment"
+        android:name="com.example.noteapp.ui.fragments.notefragment.NoteBottomSheetFragment"
+        android:label="fragment_note_bottom_sheet"
+        tools:layout="@layout/fragment_note_bottom_sheet" >
+        <action
+            android:id="@+id/action_noteBottomSheetFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.noteapp.ui.fragments.CameraFragment"
+        android:label="CameraFragment" />
+</navigation>

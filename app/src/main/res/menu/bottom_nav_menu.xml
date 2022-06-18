@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/addNotesFragment"
+        android:icon="@drawable/ic_check_box"
+        android:title="Add Notes"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/writeFragment"
+        android:icon="@drawable/ic_draw"
+        android:title="Add Writing"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/addRecording"
+        android:icon="@drawable/ic_mic"
+        android:title="Add Recording"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/addImg"
+        android:icon="@drawable/ic_image"
+        android:title="Add Image"
+        app:showAsAction="ifRoom" />
+
+</menu>

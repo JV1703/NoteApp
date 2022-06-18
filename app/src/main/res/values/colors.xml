@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="primary">#eeeeee</color>
+
+    <!--note background colors. material io palette 50-->
+    <color name="note_bg_transparent">#FFFFFF</color>
+    <color name="note_bg_red">#ffebee</color>
+    <color name="note_bg_pink">#fce4ec</color>
+    <color name="note_bg_purple">#f3e5f5</color>
+    <color name="note_bg_deep_purple">#ede7f6</color>
+    <color name="note_bg_indigo">#e8eaf6</color>
+    <color name="note_bg_blue">#e3f2fd</color>
+    <color name="note_bg_light_blue">#e1f5fe</color>
+    <color name="note_bg_cyan">#e0f7fa</color>
+    <color name="note_bg_teal">#e0f2f1</color>
+    <color name="note_bg_green">#e8f5e9</color>
+    <color name="note_bg_light_green">#f1f8e9</color>
+    <color name="note_bg_lime">#f9fbe7</color>
+    <color name="note_bg_yellow">#fffde7</color>
+    <color name="note_bg_amber">#fff8e1</color>
+    <color name="note_bg_orange">#fff3e0</color>
+    <color name="note_bg_deep_orange">#fbe9e7</color>
+    <color name="note_bg_brown">#efebe9</color>
+    <color name="note_bg_grey">#fafafa</color>
+    <color name="note_bg_blue_grey">#eceff1</color>
+
+    <array name="bg_color">
+        <item name="note_bg_transparent">#FFFFFF</item>
+        <item name="note_bg_red">#ffebee</item>
+        <item name="note_bg_pink">#fce4ec</item>
+        <item name="note_bg_purple">#f3e5f5</item>
+        <item name="note_bg_deep_purple">#ede7f6</item>
+        <item name="note_bg_indigo">#e8eaf6</item>
+        <item name="note_bg_blue">#e3f2fd</item>
+        <item name="note_bg_light_blue">#e1f5fe</item>
+        <item name="note_bg_cyan">#e0f7fa</item>
+        <item name="note_bg_teal">#e0f2f1</item>
+        <item name="note_bg_green">#e8f5e9</item>
+        <item name="note_bg_light_green">#f1f8e9</item>
+        <item name="note_bg_lime">#f9fbe7</item>
+        <item name="note_bg_yellow">#fffde7</item>
+        <item name="note_bg_amber">#fff8e1</item>
+        <item name="note_bg_orange">#fff3e0</item>
+        <item name="note_bg_deep_orange">#fbe9e7</item>
+        <item name="note_bg_brown">#efebe9</item>
+        <item name="note_bg_grey">#fafafa</item>
+        <item name="note_bg_blue_grey">#eceff1</item>
+    </array>
+
+    <color name="dividerColor">#1F000000</color>
+
+</resources>
