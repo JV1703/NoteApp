@@ -11,9 +11,6 @@ interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNote(note: Note)
 
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    fun insertImage(image: MediaStore.Images)
-
     @Update()
     fun updateNote(note: Note)
 

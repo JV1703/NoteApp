@@ -2,11 +2,14 @@ package com.example.noteapp.ui.fragments.notefragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.noteapp.BaseApplication
 import com.example.noteapp.R
@@ -20,7 +23,7 @@ import com.github.dhaval2404.colorpicker.model.ColorShape
 import com.github.dhaval2404.colorpicker.model.ColorSwatch
 import java.util.*
 
-class UpdateNoteFragment : Fragment() {
+class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private var _binding: FragmentUpdateNoteBinding? = null
     private val binding get() = _binding!!
@@ -68,6 +71,15 @@ class UpdateNoteFragment : Fragment() {
             setPinStatus()
             Toast.makeText(requireContext(), "pin status: $pinStatus", Toast.LENGTH_SHORT).show()
         }
+
+        binding.back.setOnClickListener {
+            val action = UpdateNoteFragmentDirections.actionUpdateNoteFragmentToMainFragment()
+            findNavController().navigate(action)
+        }
+
+        binding.vertMenu.setOnClickListener {
+            showPopup(it)
+        }
     }
 
     private fun loadNote() {
@@ -108,6 +120,16 @@ class UpdateNoteFragment : Fragment() {
             .showBottomSheet(childFragmentManager)
     }
 
+    private fun showPopup(v: View) {
+        val popup = PopupMenu(requireContext(), v)
+        val inflater = popup.menuInflater
+        inflater.inflate(R.menu.popup_menu, popup.menu)
+        popup.setForceShowIcon(true)
+        popup.show()
+
+        popup.setOnMenuItemClickListener(this)
+    }
+
     private fun setPinStatus() {
         pinStatus = !pinStatus
         if (pinStatus) {
@@ -115,5 +137,13 @@ class UpdateNoteFragment : Fragment() {
         } else {
             binding.pin.setImageResource(R.drawable.ic_pin_no_fill)
         }
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.delete -> Toast.makeText(requireContext(), "Delete", Toast.LENGTH_SHORT).show()
+            R.id.labels -> Toast.makeText(requireContext(), "Labels", Toast.LENGTH_SHORT).show()
+        }
+        return true
     }
 }

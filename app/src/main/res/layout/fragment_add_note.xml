@@ -14,9 +14,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/note_root"
-            android:padding="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="20dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/top_bar"
@@ -166,75 +166,9 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <include
             android:id="@+id/bottom_sheet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bottom_sheet"
-            app:behavior_hideable="true"
-            app:behavior_peekHeight="0dp"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            app:layout_constraintBottom_toTopOf="@id/bottom_constraint_layout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/take_photo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:drawablePadding="24dp"
-                android:text="Take photo"
-                app:drawableStartCompat="@drawable/ic_camera"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/add_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:drawablePadding="24dp"
-                android:text="Add image"
-                app:drawableStartCompat="@drawable/ic_image"
-                app:layout_constraintStart_toStartOf="@id/take_photo"
-                app:layout_constraintTop_toBottomOf="@id/take_photo" />
-
-            <TextView
-                android:id="@+id/drawing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:drawableStart="@drawable/ic_draw"
-                android:drawablePadding="24dp"
-                android:text="Drawing"
-                app:layout_constraintStart_toStartOf="@id/add_image"
-                app:layout_constraintTop_toBottomOf="@id/add_image" />
-
-            <TextView
-                android:id="@+id/recording"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:drawablePadding="24dp"
-                android:text="Recording"
-                app:drawableStartCompat="@drawable/ic_mic"
-                app:layout_constraintStart_toStartOf="@id/drawing"
-                app:layout_constraintTop_toBottomOf="@id/drawing" />
-
-            <TextView
-                android:id="@+id/checkboxes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:drawablePadding="24dp"
-                android:text="Checkboxes"
-                app:drawableStartCompat="@drawable/ic_check_box"
-                app:layout_constraintStart_toStartOf="@id/checkboxes"
-                app:layout_constraintTop_toBottomOf="@id/recording" />
-
-        </LinearLayout>
+            layout="@layout/fragment_note_bottom_sheet" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

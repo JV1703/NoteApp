@@ -4,8 +4,10 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -24,7 +26,7 @@ import com.github.dhaval2404.colorpicker.model.ColorSwatch
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.util.*
 
-class AddNoteFragment : Fragment() {
+class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private var _binding: FragmentAddNoteBinding? = null
     private val binding get() = _binding!!
@@ -50,7 +52,7 @@ class AddNoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.bottomSheet)
 
         noteViewModel.imgList.observe(viewLifecycleOwner) { image ->
             if (image.isNotEmpty()) {
@@ -81,11 +83,19 @@ class AddNoteFragment : Fragment() {
         binding.add.setOnClickListener {
             val action = AddNoteFragmentDirections.actionAddNoteFragmentToNoteBottomSheetFragment()
             findNavController().navigate(action)
-//            bottomSheetController()
         }
 
         binding.pin.setOnClickListener {
             setPinStatus()
+        }
+
+        binding.back.setOnClickListener {
+            val action = AddNoteFragmentDirections.actionAddNoteFragmentToMainFragment()
+            findNavController().navigate(action)
+        }
+
+        binding.vertMenu.setOnClickListener {
+            showPopup(it)
         }
     }
 
@@ -116,6 +126,16 @@ class AddNoteFragment : Fragment() {
             .showBottomSheet(childFragmentManager)
     }
 
+    private fun showPopup(v: View) {
+        val popup = PopupMenu(requireContext(), v)
+        val inflater = popup.menuInflater
+        inflater.inflate(R.menu.popup_menu, popup.menu)
+        popup.setForceShowIcon(true)
+        popup.show()
+
+        popup.setOnMenuItemClickListener(this)
+    }
+
     private fun setupImgAdapter(images: MutableList<ByteArray>) {
         imageAdapter = ImageAdapter()
         imageAdapter.submitList(images)
@@ -132,22 +152,11 @@ class AddNoteFragment : Fragment() {
         Toast.makeText(requireContext(), "pin status: ${pinStatus}", Toast.LENGTH_SHORT).show()
     }
 
-//    private fun bottomSheetController() {
-//        if (!bottomSheetStatus) {
-//            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-//        } else {
-//            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-//        }
-//        bottomSheetStatus = !bottomSheetStatus
-//    }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (resultCode == Activity.RESULT_OK) {
-//            if (requestCode == NoteBottomSheetFragment.CAMERA_REQUEST_CODE) {
-//                val image: Bitmap = data?.extras?.get("data") as Bitmap
-//                binding.test.setImageBitmap(image)
-//            }
-//        }
-//    }
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.delete -> Toast.makeText(requireContext(), "Delete", Toast.LENGTH_SHORT).show()
+            R.id.labels -> Toast.makeText(requireContext(), "Labels", Toast.LENGTH_SHORT).show()
+        }
+        return true
+    }
 }
