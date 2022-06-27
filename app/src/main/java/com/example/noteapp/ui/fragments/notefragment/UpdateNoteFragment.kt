@@ -96,7 +96,7 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun saveNote() {
         val note = Note(
-            id = navArgs.note.id,
+            noteId = navArgs.note.noteId,
             title = binding.noteTitle.text.toString(),
             text = binding.noteBody.text.toString(),
             timeStamp = Date(),

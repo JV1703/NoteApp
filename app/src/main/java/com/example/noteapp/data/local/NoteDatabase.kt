@@ -6,10 +6,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.noteapp.data.local.dao.NoteDao
+import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.data.local.model.TypeConverter
+import com.example.noteapp.data.local.relations.NoteWithLabelCrossRef
 
-@Database(entities = [Note::class], version = 1, exportSchema = false)
+@Database(
+    entities = [
+        Note::class,
+        Label::class,
+        NoteWithLabelCrossRef::class
+    ], version = 1, exportSchema = false
+)
 @TypeConverters(TypeConverter::class)
 abstract class NoteDatabase : RoomDatabase() {
 
