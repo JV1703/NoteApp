@@ -11,9 +11,7 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:fitsSystemWindows="true"
-
         tools:context=".ui.fragments.MainFragment">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -41,6 +39,7 @@
                         android:layout_height="match_parent">
 
                         <TextView
+                            android:id="@+id/search_bar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Search your notes"
@@ -51,9 +50,29 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
+                            android:id="@+id/sort_time"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/ic_anticlockwise"
+                            app:layout_constraintBottom_toBottomOf="@id/pin"
+                            app:layout_constraintEnd_toStartOf="@id/pin"
+                            app:layout_constraintTop_toTopOf="@id/pin" />
+
+                        <ImageView
+                            android:id="@+id/pin"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/ic_pin_no_fill"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/view_type"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
                             android:id="@+id/view_type"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:layout_marginEnd="24dp"
                             android:src="@drawable/ic_list_view"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -84,12 +103,11 @@
                 android:id="@+id/circle"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:background="@drawable/test"
                 android:layout_gravity="bottom|end"
-                android:layout_marginBottom="30dp"
                 android:layout_marginEnd="30dp"
-                android:visibility="gone"
-                />
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/test"
+                android:visibility="gone" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/new_note"

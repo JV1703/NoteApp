@@ -2,7 +2,6 @@ package com.example.noteapp.data
 
 import com.example.noteapp.data.local.dao.NoteDao
 import com.example.noteapp.data.local.model.Note
-//import com.example.noteapp.data.local.relations.NoteWithImages
 import kotlinx.coroutines.flow.Flow
 
 class Repository(val noteDao: NoteDao) {
@@ -15,8 +14,12 @@ class Repository(val noteDao: NoteDao) {
         noteDao.insertNote(note)
     }
 
-    suspend fun updateNote(note: Note){
+    suspend fun updateNote(note: Note) {
         noteDao.updateNote(note)
+    }
+
+    suspend fun deleteNote(note: Note) {
+        noteDao.deleteNote(note)
     }
 
 }

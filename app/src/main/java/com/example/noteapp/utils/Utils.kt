@@ -2,6 +2,8 @@ package com.example.noteapp.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
@@ -45,4 +47,8 @@ fun <T> MutableLiveData<MutableList<T>>.removeItemAt(index: Int) {
     } else {
         this.value = mutableListOf()
     }
+}
+
+fun Fragment.makeToast(msg: String){
+    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
 }

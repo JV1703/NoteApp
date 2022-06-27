@@ -12,11 +12,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.noteapp.BaseApplication
 import com.example.noteapp.R
 import com.example.noteapp.adapter.recyclerview.NotesAdapter
+import com.example.noteapp.adapter.recyclerview.noteadapter.NoteAdapter
+import com.example.noteapp.adapter.recyclerview.noteadapter.PinnedItemAdapter
 import com.example.noteapp.databinding.FragmentMainBinding
 import com.example.noteapp.ui.animation.startAnimation
 import com.google.android.material.navigation.NavigationView
@@ -27,15 +30,23 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     private val binding get() = _binding!!
 
     private lateinit var notesAdapter: NotesAdapter
+    private lateinit var noteAdapter: NoteAdapter
+    private lateinit var pinnedItemAdapter: PinnedItemAdapter
+    private lateinit var concatAdapter: ConcatAdapter
     private val noteViewModel: NoteViewModel by activityViewModels {
         NoteViewModelFactory((activity?.application as BaseApplication).noteDatabase.noteDao())
     }
 
     private var isGridLayoutManager = true
+    private var pinToggle = false
+    private var sortByTime = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         notesAdapter = NotesAdapter()
+        noteAdapter = NoteAdapter()
+        pinnedItemAdapter = PinnedItemAdapter()
+        concatAdapter = ConcatAdapter(pinnedItemAdapter, noteAdapter)
     }
 
     override fun onCreateView(
@@ -55,12 +66,39 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         drawerToggle()
 
         noteViewModel.allNotes.observe(viewLifecycleOwner) { data ->
-            notesAdapter.pinnedSorting(data, isGridLayoutManager)
+
+//            noteAdapter.pinnedSorting(data, isGridLayoutManager)
+//            pinnedItemAdapter.pinnedSorting(data, isGridLayoutManager)
+
+            notesAdapter.submitList(data)
+
             binding.viewType.setOnClickListener {
                 isGridLayoutManager = !isGridLayoutManager
-                notesAdapter.pinnedSorting(data, isGridLayoutManager)
+//                noteAdapter.pinnedSorting(data, isGridLayoutManager)
+//                pinnedItemAdapter.pinnedSorting(data, isGridLayoutManager)
                 chooseRecyclerViewLayout()
                 chooseLayoutIcon()
+            }
+
+            binding.pin.setOnClickListener {
+                pinToggle()
+                val prioritizePin = data.sortedBy { it.pinned }
+                if (pinToggle) {
+                    notesAdapter.submitList(prioritizePin)
+                } else {
+                    notesAdapter.submitList(data)
+                }
+            }
+
+
+            binding.sortTime.setOnClickListener {
+                sortByTimeToggle()
+                val toLatest = data.sortedBy { it.timeStamp }
+                if(sortByTime){
+                    notesAdapter.submitList(data)
+                }else{
+                    notesAdapter.submitList(toLatest)
+                }
             }
         }
     }
@@ -108,6 +146,24 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         } else {
             binding.viewType.setImageResource(R.drawable.ic_list_view)
         }
+    }
+
+    private fun pinToggle() {
+        if (pinToggle) {
+            binding.pin.setImageResource(R.drawable.ic_pin_fill)
+        } else {
+            binding.pin.setImageResource(R.drawable.ic_pin_no_fill)
+        }
+        pinToggle = !pinToggle
+    }
+
+    private fun sortByTimeToggle() {
+        if (sortByTime) {
+            binding.sortTime.setImageResource(R.drawable.ic_anticlockwise)
+        } else {
+            binding.sortTime.setImageResource(R.drawable.ic_clockwise)
+        }
+        sortByTime = !sortByTime
     }
 
     private fun drawerToggle() {

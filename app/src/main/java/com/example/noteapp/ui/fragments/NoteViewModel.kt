@@ -30,6 +30,12 @@ class NoteViewModel(private val noteDao: NoteDao) : ViewModel() {
         }
     }
 
+    fun deleteNote(note: Note) {
+        viewModelScope.launch {
+                repository.deleteNote(note)
+        }
+    }
+
     fun addImage(image: ByteArray) {
         _imgList.addNewItem(image)
         Log.i("image_list", "${_imgList.value?.isEmpty()}")

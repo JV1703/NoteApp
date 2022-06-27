@@ -1,6 +1,7 @@
 package com.example.noteapp.ui.fragments.notefragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -17,6 +18,7 @@ import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.databinding.FragmentUpdateNoteBinding
 import com.example.noteapp.ui.fragments.NoteViewModel
 import com.example.noteapp.ui.fragments.NoteViewModelFactory
+import com.example.noteapp.utils.makeToast
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.github.dhaval2404.colorpicker.listener.ColorListener
 import com.github.dhaval2404.colorpicker.model.ColorShape
@@ -130,6 +132,17 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         popup.setOnMenuItemClickListener(this)
     }
 
+    private fun deleteNote(note: Note) {
+        try {
+            noteViewModel.deleteNote(note)
+            val action = UpdateNoteFragmentDirections.actionUpdateNoteFragmentToMainFragment()
+            findNavController().navigate(action)
+        } catch (e: Exception) {
+            makeToast("Unable to delete note")
+            Log.d("note_view_model", "deleteNote: ${e.message}")
+        }
+    }
+
     private fun setPinStatus() {
         pinStatus = !pinStatus
         if (pinStatus) {
@@ -141,7 +154,7 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.delete -> Toast.makeText(requireContext(), "Delete", Toast.LENGTH_SHORT).show()
+            R.id.delete -> deleteNote(navArgs.note)
             R.id.labels -> Toast.makeText(requireContext(), "Labels", Toast.LENGTH_SHORT).show()
         }
         return true
