@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.noteapp.data.Repository
 import com.example.noteapp.data.local.dao.NoteDao
+import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.utils.addNewItem
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,7 @@ class NoteViewModel(private val noteDao: NoteDao) : ViewModel() {
     private val repository = Repository(noteDao)
 
     val allNotes = repository.getNotes().asLiveData()
+    val allLabel = repository.getLabels().asLiveData()
     private var _pinned = false
     val pinned get() = _pinned
 
@@ -30,9 +32,19 @@ class NoteViewModel(private val noteDao: NoteDao) : ViewModel() {
         }
     }
 
+    fun saveLabel(label: Label) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.insertLabel(label)
+            } catch (e: Exception) {
+                Log.d("note_view_model", "saveLabel: ${e.message}")
+            }
+        }
+    }
+
     fun deleteNote(note: Note) {
         viewModelScope.launch {
-                repository.deleteNote(note)
+            repository.deleteNote(note)
         }
     }
 

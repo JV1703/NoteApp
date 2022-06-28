@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_mainFragment_to_updateNoteFragment"
             app:destination="@id/updateNoteFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_labelFragment"
+            app:destination="@id/labelFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNoteFragment"
@@ -60,4 +63,8 @@
         android:id="@+id/cameraFragment"
         android:name="com.example.noteapp.ui.fragments.CameraFragment"
         android:label="CameraFragment" />
+    <fragment
+        android:id="@+id/labelFragment"
+        android:name="com.example.noteapp.ui.fragments.LabelFragment"
+        android:label="LabelFragment" />
 </navigation>

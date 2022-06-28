@@ -12,16 +12,22 @@ import kotlinx.coroutines.flow.Flow
 interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note: Note)
+    fun insertNote(note: Note)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertLabel(label: Label)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    fun insertLabel(label: Label)
 
     @Update()
-    suspend fun updateNote(note: Note)
+    fun updateNote(note: Note)
+
+    @Update()
+    fun updateLabel(label: Label)
 
     @Delete
-    suspend fun deleteNote(note: Note)
+    fun deleteNote(note: Note)
+
+    @Delete
+    fun deleteLabel(label: Label)
 
     @Query("SELECT * FROM Note ORDER BY timeStamp DESC")
     fun getNotes(): Flow<List<Note>>
@@ -29,17 +35,15 @@ interface NoteDao {
     @Query("SELECT * FROM Note WHERE noteId = :noteId ORDER BY timeStamp")
     fun getNoteById(noteId: Long): Flow<Note>
 
+    @Query("SELECT * FROM Label")
+    fun getLabels(): Flow<List<Label>>
+
     @Transaction
     @Query("SELECT * FROM Note where noteId = :noteId")
-    fun getNoteWithLabels(noteId: Long): Flow<NoteWithLabels>
+    fun getLabelsOfNote(noteId: Long): Flow<List<NoteWithLabels>>
 
     @Transaction
     @Query("SELECT * FROM Label where labelId = :labelId")
-    fun getLabelWithNotes(labelId: Long): Flow<LabelWithNotes>
-
-
-//    @Transaction
-//    @Query("SELECT * FROM Note WHERE id = :noteId")
-//    fun getNoteWithImages(noteId: Long): Flow<List<NoteWithImages>>
+    fun getNotesOfLabel(labelId: Long): Flow<List<LabelWithNotes>>
 
 }

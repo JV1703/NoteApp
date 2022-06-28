@@ -94,9 +94,9 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
             binding.sortTime.setOnClickListener {
                 sortByTimeToggle()
                 val toLatest = data.sortedBy { it.timeStamp }
-                if(sortByTime){
+                if (sortByTime) {
                     notesAdapter.submitList(data)
-                }else{
+                } else {
                     notesAdapter.submitList(toLatest)
                 }
             }
@@ -192,7 +192,8 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
                 Toast.makeText(requireContext(), "reminder", Toast.LENGTH_SHORT).show()
             }
             R.id.labels -> {
-                Toast.makeText(requireContext(), "labels", Toast.LENGTH_SHORT).show()
+                val action = MainFragmentDirections.actionMainFragmentToLabelFragment()
+                findNavController().navigate(action)
             }
             R.id.delete -> {
                 Toast.makeText(requireContext(), "delete", Toast.LENGTH_SHORT).show()
