@@ -74,7 +74,7 @@ class LabelFragment : Fragment() {
                 labelName = binding.addLabelTextField.editText?.text.toString().trim()
             )
             noteViewModel.saveLabel(label)
-            binding.addLabelTextField.editText?.text = null4
+            binding.addLabelTextField.editText?.text = null
             binding.addLabelTextField.clearFocus()
         }
     }

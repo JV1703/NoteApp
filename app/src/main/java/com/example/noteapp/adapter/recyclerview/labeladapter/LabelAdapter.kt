@@ -70,11 +70,7 @@ class LabelAdapter(activity: Activity) :
                             labelId = label.labelId,
                             labelName = textInputLayout.editText?.text.toString().trim()
                         )
-                        try {
-                            noteDao.updateLabel(label)
-                        } catch (e: Exception) {
-                            Log.i("label_adapter", "update label: ${e.message}")
-                        }
+
                     }
                     textInputLayout.clearFocus()
                 }
@@ -87,6 +83,18 @@ class LabelAdapter(activity: Activity) :
             } else {
                 textInputLayout.setStartIconDrawable(labelIcon)
                 textInputLayout.setEndIconDrawable(pencilIcon)
+                adapterScope.launch {
+                    val label = Label(
+                        labelId = label.labelId,
+                        labelName = textInputLayout.editText?.text.toString().trim()
+                    )
+                    try {
+                        Log.i("label_adapter", "update label: successfully updated")
+                        noteDao.updateLabel(label)
+                    } catch (e: Exception) {
+                        Log.i("label_adapter", "update label: ${e.message}")
+                    }
+                }
                 textInputLayout.setEndIconOnClickListener {
                 }
                 textInputLayout.setStartIconOnClickListener {
