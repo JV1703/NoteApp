@@ -1,7 +1,11 @@
 package com.example.noteapp.utils
 
+import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -51,4 +55,11 @@ fun <T> MutableLiveData<MutableList<T>>.removeItemAt(index: Int) {
 
 fun Fragment.makeToast(msg: String){
     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+}
+
+fun showKeyboard(editText: EditText, context: Context) {
+    editText.requestFocus()
+    val imm: InputMethodManager =
+        context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.showSoftInput(editText, 0)
 }

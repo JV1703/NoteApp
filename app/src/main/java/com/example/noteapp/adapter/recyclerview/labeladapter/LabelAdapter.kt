@@ -40,7 +40,6 @@ class LabelAdapter(activity: Activity) :
     override fun onBindViewHolder(holder: LabelViewHolder, position: Int) {
         val currentLabel = getItem(position)
         holder.bind(currentLabel)
-
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Label>() {

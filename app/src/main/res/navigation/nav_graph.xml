@@ -33,6 +33,9 @@
             app:enterAnim="@anim/hide_note"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_addNoteFragment_to_labelSelectionFragment"
+            app:destination="@id/labelSelectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateNoteFragment"
@@ -49,6 +52,9 @@
             app:destination="@id/mainFragment"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_updateNoteFragment_to_labelSelectionFragment"
+            app:destination="@id/labelSelectionFragment" />
     </fragment>
     <dialog
         android:id="@+id/noteBottomSheetFragment"
@@ -65,6 +71,10 @@
         android:label="CameraFragment" />
     <fragment
         android:id="@+id/labelFragment"
-        android:name="com.example.noteapp.ui.fragments.LabelFragment"
+        android:name="com.example.noteapp.ui.fragments.label.LabelFragment"
         android:label="LabelFragment" />
+    <fragment
+        android:id="@+id/labelSelectionFragment"
+        android:name="com.example.noteapp.ui.fragments.label.LabelSelectionFragment"
+        android:label="LabelSelectionFragment" />
 </navigation>

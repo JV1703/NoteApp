@@ -99,4 +99,7 @@ dependencies {
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
+    // Flexbox
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
 }

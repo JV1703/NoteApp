@@ -186,7 +186,7 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.notes -> {
-                Toast.makeText(requireContext(), "notes", Toast.LENGTH_SHORT).show()
+                binding.drawerLayout.close()
             }
             R.id.reminder -> {
                 Toast.makeText(requireContext(), "reminder", Toast.LENGTH_SHORT).show()

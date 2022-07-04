@@ -10,24 +10,46 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.fragments.label.LabelFragment">
+        tools:context=".ui.fragments.label.LabelSelectionFragment">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ic_return"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:iconifiedByDefault="false"
+            app:layout_constraintBottom_toBottomOf="@id/back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/back"
+            app:layout_constraintTop_toTopOf="@id/back"
+            app:queryBackground="@android:color/transparent"
+            app:queryHint="Enter label name"
+            app:searchIcon="@null" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/addLabelTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Create new label"
+            android:visibility="gone"
             app:endIconMode="custom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_bar"
             app:startIconDrawable="@drawable/ic_add_note">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:lines="1"
                 android:background="@android:color/transparent" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -36,11 +58,11 @@
             android:id="@+id/label_rv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="12dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addLabelTextField" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

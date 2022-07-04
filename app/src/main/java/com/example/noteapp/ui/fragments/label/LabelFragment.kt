@@ -1,4 +1,4 @@
-package com.example.noteapp.ui.fragments
+package com.example.noteapp.ui.fragments.label
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,9 @@ import com.example.noteapp.R
 import com.example.noteapp.adapter.recyclerview.labeladapter.LabelAdapter
 import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.databinding.FragmentLabelBinding
+import com.example.noteapp.ui.fragments.NoteViewModel
+import com.example.noteapp.ui.fragments.NoteViewModelFactory
+import com.example.noteapp.utils.showKeyboard
 
 class LabelFragment : Fragment() {
 
@@ -45,7 +48,6 @@ class LabelFragment : Fragment() {
 
     private fun setListeners() {
         textFieldFocus()
-        saveLabel()
     }
 
     override fun onDestroy() {
@@ -60,10 +62,15 @@ class LabelFragment : Fragment() {
                     requireContext().getDrawable(R.drawable.ic_check)
                 binding.addLabelTextField.startIconDrawable =
                     requireContext().getDrawable(R.drawable.ic_clear)
+                saveLabel()
             } else {
                 binding.addLabelTextField.endIconDrawable = null
                 binding.addLabelTextField.startIconDrawable =
                     requireContext().getDrawable(R.drawable.ic_add_note)
+                binding.addLabelTextField.setEndIconOnClickListener {
+                    binding.addLabelTextField.editText?.requestFocus()
+                    showKeyboard(binding.addLabelTextField.editText!!, requireContext())
+                }
             }
         }
     }

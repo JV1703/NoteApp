@@ -5,6 +5,7 @@ import androidx.room.*
 import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.data.local.relations.LabelWithNotes
+import com.example.noteapp.data.local.relations.NoteLabelCrossRef
 import com.example.noteapp.data.local.relations.NoteWithLabels
 import kotlinx.coroutines.flow.Flow
 
@@ -16,6 +17,9 @@ interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertLabel(label: Label)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertNoteLabelCrossRef(crossRef: NoteLabelCrossRef)
 
     @Update()
     fun updateNote(note: Note)

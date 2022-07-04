@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.noteapp.BaseApplication
 import com.example.noteapp.R
 import com.example.noteapp.adapter.recyclerview.ImageAdapter
+import com.example.noteapp.adapter.recyclerview.noteadapter.MiniLabelAdapter
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.databinding.FragmentAddNoteBinding
 import com.example.noteapp.ui.fragments.NoteViewModel
@@ -23,6 +24,9 @@ import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.github.dhaval2404.colorpicker.listener.ColorListener
 import com.github.dhaval2404.colorpicker.model.ColorShape
 import com.github.dhaval2404.colorpicker.model.ColorSwatch
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.util.*
 
@@ -34,7 +38,8 @@ class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var bgColor = Color.parseColor("#FFFFFF")
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
     private var bottomSheetStatus = false
-    private var imageAdapter = ImageAdapter()
+    private lateinit var imageAdapter: ImageAdapter
+    private lateinit var miniLabelAdapter: MiniLabelAdapter
     private var pinStatus = false
 
     private val noteViewModel: NoteViewModel by activityViewModels {
@@ -45,13 +50,18 @@ class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.i("add_note_fragment", "onCreateView: triggered")
+        imageAdapter = ImageAdapter()
+        miniLabelAdapter = MiniLabelAdapter()
         _binding = FragmentAddNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.i("add_note_fragment", "onViewCreated: triggered")
         setListeners()
+        setupMiniLabelAdapter()
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet.bottomSheet)
 
         noteViewModel.imgList.observe(viewLifecycleOwner) { image ->
@@ -64,11 +74,6 @@ class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 Log.i("image_list", "isEmpty: ${image.isEmpty()} size: ${image.size}")
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
     private fun setListeners() {
@@ -137,9 +142,21 @@ class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun setupImgAdapter(images: MutableList<ByteArray>) {
-        imageAdapter = ImageAdapter()
         imageAdapter.submitList(images)
         binding.imageRv.adapter = imageAdapter
+    }
+
+    private fun setupMiniLabelAdapter() {
+        Log.i("add_note_fragment", "${noteViewModel.selectedLabels}")
+        binding.labelRv.adapter = miniLabelAdapter
+        val layoutManager = FlexboxLayoutManager(requireContext(), FlexDirection.ROW, FlexWrap.WRAP)
+        binding.labelRv.layoutManager = layoutManager
+        if (noteViewModel.selectedLabels.isEmpty()) {
+            binding.labelRv.visibility = View.GONE
+        } else {
+            miniLabelAdapter.submitList(noteViewModel.selectedLabels)
+            binding.labelRv.visibility = View.VISIBLE
+        }
     }
 
     private fun setPinStatus() {
@@ -155,8 +172,22 @@ class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.delete -> Toast.makeText(requireContext(), "Delete", Toast.LENGTH_SHORT).show()
-            R.id.labels -> Toast.makeText(requireContext(), "Labels", Toast.LENGTH_SHORT).show()
+            R.id.labels -> {
+                val action =
+                    AddNoteFragmentDirections.actionAddNoteFragmentToLabelSelectionFragment()
+                findNavController().navigate(action)
+            }
         }
         return true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        noteViewModel.clearSelectedLabels()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

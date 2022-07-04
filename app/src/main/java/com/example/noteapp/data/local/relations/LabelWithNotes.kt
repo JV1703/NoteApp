@@ -11,7 +11,7 @@ data class LabelWithNotes(
     @Relation(
         parentColumn = "labelId",
         entityColumn = "noteId",
-        associateBy = Junction(NoteWithLabelCrossRef::class)
+        associateBy = Junction(NoteLabelCrossRef::class)
     )
     val notes: List<Note>
 )

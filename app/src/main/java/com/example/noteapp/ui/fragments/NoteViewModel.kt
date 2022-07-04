@@ -16,6 +16,10 @@ class NoteViewModel(private val noteDao: NoteDao) : ViewModel() {
 
     val allNotes = repository.getNotes().asLiveData()
     val allLabel = repository.getLabels().asLiveData()
+
+    private var _selectedLabels = arrayListOf<Label>()
+    val selectedLabels get() = _selectedLabels
+
     private var _pinned = false
     val pinned get() = _pinned
 
@@ -55,6 +59,14 @@ class NoteViewModel(private val noteDao: NoteDao) : ViewModel() {
 
     fun setPinned() {
         _pinned = !_pinned
+    }
+
+    fun saveSelectedLabels(selectedLabels: ArrayList<Label>) {
+        _selectedLabels = selectedLabels
+    }
+
+    fun clearSelectedLabels() {
+        _selectedLabels.clear()
     }
 }
 

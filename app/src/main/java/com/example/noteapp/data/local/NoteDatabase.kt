@@ -9,13 +9,13 @@ import com.example.noteapp.data.local.dao.NoteDao
 import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.data.local.model.TypeConverter
-import com.example.noteapp.data.local.relations.NoteWithLabelCrossRef
+import com.example.noteapp.data.local.relations.NoteLabelCrossRef
 
 @Database(
     entities = [
         Note::class,
         Label::class,
-        NoteWithLabelCrossRef::class
+        NoteLabelCrossRef::class
     ], version = 1, exportSchema = false
 )
 @TypeConverters(TypeConverter::class)
