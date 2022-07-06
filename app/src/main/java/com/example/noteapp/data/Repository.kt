@@ -4,6 +4,7 @@ import com.example.noteapp.data.local.dao.NoteDao
 import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.data.local.relations.LabelWithNotes
+import com.example.noteapp.data.local.relations.NoteLabelCrossRef
 import com.example.noteapp.data.local.relations.NoteWithLabels
 import kotlinx.coroutines.flow.Flow
 
@@ -24,6 +25,10 @@ class Repository(val noteDao: NoteDao) {
 
     suspend fun insertLabel(label: Label){
         noteDao.insertLabel(label)
+    }
+
+    suspend fun insertNoteLabelCrossReference(crossRef: NoteLabelCrossRef){
+        noteDao.insertNoteLabelCrossRef(crossRef)
     }
 
     suspend fun updateNote(note: Note) {

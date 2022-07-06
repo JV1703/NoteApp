@@ -36,7 +36,7 @@ interface NoteDao {
     @Query("SELECT * FROM Note ORDER BY timeStamp DESC")
     fun getNotes(): Flow<List<Note>>
 
-    @Query("SELECT * FROM Note WHERE noteId = :noteId ORDER BY timeStamp")
+    @Query("SELECT * FROM Note WHERE noteId = :noteId")
     fun getNoteById(noteId: Long): Flow<Note>
 
     @Query("SELECT * FROM Label")

@@ -14,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.noteapp.BaseApplication
 import com.example.noteapp.R
+import com.example.noteapp.adapter.recyclerview.noteadapter.MiniLabelAdapter
+import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.databinding.FragmentUpdateNoteBinding
 import com.example.noteapp.ui.fragments.NoteViewModel
@@ -23,6 +25,9 @@ import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.github.dhaval2404.colorpicker.listener.ColorListener
 import com.github.dhaval2404.colorpicker.model.ColorShape
 import com.github.dhaval2404.colorpicker.model.ColorSwatch
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import java.util.*
 
 class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
@@ -36,6 +41,8 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var bgColor: Int = -1
     private var pinStatus: Boolean = false
 
+    private lateinit var miniLabelAdapter: MiniLabelAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +50,7 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     ): View {
         pinStatus = navArgs.note.pinned
         bgColor = navArgs.note.bgColor
+        miniLabelAdapter = MiniLabelAdapter()
         _binding = FragmentUpdateNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -51,6 +59,7 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         loadNote()
         setListeners()
+        setupMiniLabelAdapter()
         binding.note = navArgs.note
     }
 
@@ -86,7 +95,6 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun loadNote() {
         binding.noteRoot.setBackgroundColor(navArgs.note.bgColor)
-
         if (pinStatus) {
             binding.pin.setImageResource(R.drawable.ic_pin_fill)
         } else {
@@ -101,7 +109,8 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             text = binding.noteBody.text.toString(),
             timeStamp = Date(),
             bgColor = bgColor,
-            pinned = pinStatus
+            pinned = pinStatus,
+            label = arrayListOf<Label>()
         )
         noteViewModel.saveNote(note)
     }
@@ -149,6 +158,19 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             binding.pin.setImageResource(R.drawable.ic_pin_fill)
         } else {
             binding.pin.setImageResource(R.drawable.ic_pin_no_fill)
+        }
+    }
+
+    private fun setupMiniLabelAdapter() {
+        Log.i("add_note_fragment", "${noteViewModel.selectedLabels}")
+        binding.labelRv.adapter = miniLabelAdapter
+        val layoutManager = FlexboxLayoutManager(requireContext(), FlexDirection.ROW, FlexWrap.WRAP)
+        binding.labelRv.layoutManager = layoutManager
+        if (navArgs.note.label.isEmpty()) {
+            binding.labelRv.visibility = View.GONE
+        } else {
+            miniLabelAdapter.submitList(navArgs.note.label)
+            binding.labelRv.visibility = View.VISIBLE
         }
     }
 

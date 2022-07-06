@@ -110,7 +110,8 @@ class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             text = binding.noteBody.text.toString(),
             timeStamp = Date(),
             bgColor = bgColor,
-            pinned = pinStatus
+            pinned = pinStatus,
+            label = noteViewModel.selectedLabels
         )
         noteViewModel.saveNote(note)
         Toast.makeText(requireContext(), "note saved", Toast.LENGTH_SHORT).show()

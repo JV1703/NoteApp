@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import java.util.*
 
 @Parcelize
@@ -16,7 +17,7 @@ data class Note(
     val timeStamp: Date?,
     val reminder: Date? = null,
     val pinned: Boolean,
-    val label: String? = null,
+    val label: @RawValue ArrayList<Label>,
     var bgColor: Int
 ) : Parcelable
 
