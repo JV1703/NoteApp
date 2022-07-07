@@ -1,5 +1,7 @@
 package com.example.noteapp.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import com.example.noteapp.data.local.dao.NoteDao
 import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.data.local.model.Note
@@ -23,11 +25,11 @@ class Repository(val noteDao: NoteDao) {
         noteDao.insertNote(note)
     }
 
-    suspend fun insertLabel(label: Label){
+    suspend fun insertLabel(label: Label) {
         noteDao.insertLabel(label)
     }
 
-    suspend fun insertNoteLabelCrossReference(crossRef: NoteLabelCrossRef){
+    suspend fun insertNoteLabelCrossReference(crossRef: NoteLabelCrossRef) {
         noteDao.insertNoteLabelCrossRef(crossRef)
     }
 
@@ -35,7 +37,7 @@ class Repository(val noteDao: NoteDao) {
         noteDao.updateNote(note)
     }
 
-    suspend fun updateLabel(label: Label){
+    suspend fun updateLabel(label: Label) {
         noteDao.updateLabel(label)
     }
 
@@ -45,6 +47,10 @@ class Repository(val noteDao: NoteDao) {
 
     suspend fun deleteLabel(label: Label) {
         noteDao.deleteLabel(label)
+    }
+
+    fun searchLabel(labelSearchQuery: String): LiveData<List<Label>> {
+        return noteDao.searchLabel(labelSearchQuery).asLiveData()
     }
 
 }

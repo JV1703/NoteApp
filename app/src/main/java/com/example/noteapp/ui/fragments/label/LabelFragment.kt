@@ -1,6 +1,7 @@
 package com.example.noteapp.ui.fragments.label
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,12 +78,19 @@ class LabelFragment : Fragment() {
 
     private fun saveLabel() {
         binding.addLabelTextField.setEndIconOnClickListener {
-            val label = Label(
-                labelName = binding.addLabelTextField.editText?.text.toString().trim()
-            )
-            noteViewModel.saveLabel(label)
-            binding.addLabelTextField.editText?.text = null
-            binding.addLabelTextField.clearFocus()
+            binding.progressBar.visibility = View.VISIBLE
+            try {
+                val label = Label(
+                    labelName = binding.addLabelTextField.editText?.text.toString().trim()
+                )
+                noteViewModel.saveLabel(label)
+                binding.addLabelTextField.editText?.text = null
+                binding.addLabelTextField.clearFocus()
+            } catch (e: Exception) {
+                Log.d("label_fragment", "saveLabel: ${e.message}")
+            } finally {
+                binding.progressBar.visibility = View.GONE
+            }
         }
     }
 

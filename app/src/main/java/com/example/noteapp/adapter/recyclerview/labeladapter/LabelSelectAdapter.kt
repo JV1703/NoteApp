@@ -9,21 +9,23 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.databinding.LabelSelectorViewHolderBinding
+import com.example.noteapp.ui.fragments.NoteViewModel
 
-class LabelSelectAdapter :
+class LabelSelectAdapter(val noteViewModel: NoteViewModel) :
     ListAdapter<Label, LabelSelectAdapter.LabelSelectViewHolder>(DiffCallback) {
 
-    val labelList = arrayListOf<Label>()
+//    var labelList = arrayListOf<Label>()
 
     inner class LabelSelectViewHolder(val binding: LabelSelectorViewHolderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(label: Label) {
             binding.checkbox.text = label.labelName
+            binding.checkbox.isChecked = noteViewModel.selectedLabels.contains(label)
             binding.labelRoot.setOnClickListener {
                 binding.checkbox.performClick()
                 labelList(binding.checkbox, label)
                 Log.i("label_selector", "${binding.checkbox.text}: ${binding.checkbox.isChecked}")
-                Log.i("label_selector", "$labelList")
+                Log.i("label_selector", "${noteViewModel.selectedLabels}")
             }
         }
     }
@@ -41,15 +43,11 @@ class LabelSelectAdapter :
 
     private fun labelList(checkBox: CheckBox, label: Label) {
         if (checkBox.isChecked) {
-            labelList.add(label)
+            noteViewModel.checkLabel(label)
         } else {
-            labelList.remove(label)
+            noteViewModel.uncheckLabel(label)
         }
     }
-
-//    fun getCheckedLabel(): ArrayList<Label>{
-//        return labelList
-//    }
 
     override fun onBindViewHolder(holder: LabelSelectViewHolder, position: Int) {
         val label = getItem(position)

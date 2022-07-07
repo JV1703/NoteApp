@@ -17,7 +17,7 @@ class NoteViewModel(private val noteDao: NoteDao) : ViewModel() {
     val allNotes = repository.getNotes().asLiveData()
     val allLabel = repository.getLabels().asLiveData()
 
-    private var _selectedLabels = arrayListOf<Label>()
+    private var _selectedLabels = mutableSetOf<Label>()
     val selectedLabels get() = _selectedLabels
 
     private var _pinned = false
@@ -47,9 +47,13 @@ class NoteViewModel(private val noteDao: NoteDao) : ViewModel() {
     }
 
     fun deleteNote(note: Note) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.deleteNote(note)
         }
+    }
+
+    fun searchLabel(labelSearchQuery: String): LiveData<List<Label>> {
+        return repository.searchLabel(labelSearchQuery)
     }
 
     fun addImage(image: ByteArray) {
@@ -61,7 +65,15 @@ class NoteViewModel(private val noteDao: NoteDao) : ViewModel() {
         _pinned = !_pinned
     }
 
-    fun saveSelectedLabels(selectedLabels: ArrayList<Label>) {
+    fun checkLabel(label: Label) {
+        _selectedLabels.add(label)
+    }
+
+    fun uncheckLabel(label: Label) {
+        _selectedLabels.remove(label)
+    }
+
+    fun saveSelectedLabels(selectedLabels: MutableSet<Label>) {
         _selectedLabels = selectedLabels
     }
 

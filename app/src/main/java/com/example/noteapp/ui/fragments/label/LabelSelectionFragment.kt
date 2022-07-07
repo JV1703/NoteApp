@@ -1,10 +1,10 @@
 package com.example.noteapp.ui.fragments.label
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -14,7 +14,7 @@ import com.example.noteapp.databinding.FragmentLabelSelectionBinding
 import com.example.noteapp.ui.fragments.NoteViewModel
 import com.example.noteapp.ui.fragments.NoteViewModelFactory
 
-class LabelSelectionFragment : Fragment() {
+class LabelSelectionFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private var _binding: FragmentLabelSelectionBinding? = null
     private val binding get() = _binding!!
@@ -29,7 +29,7 @@ class LabelSelectionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        labelSelectAdapter = LabelSelectAdapter()
+        labelSelectAdapter = LabelSelectAdapter(noteViewModel)
         _binding = FragmentLabelSelectionBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -46,6 +46,8 @@ class LabelSelectionFragment : Fragment() {
         binding.back.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.searchBar.setOnQueryTextListener(this)
     }
 
     private fun getLabels() {
@@ -58,14 +60,33 @@ class LabelSelectionFragment : Fragment() {
         binding.labelRv.adapter = labelSelectAdapter
     }
 
-    override fun onStop() {
-        super.onStop()
-        noteViewModel.saveSelectedLabels(labelSelectAdapter.labelList)
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null) {
+            searchLabel(query)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText != null) {
+            searchLabel(newText)
+        }
+        return true
+    }
+
+    private fun searchLabel(labelSearchQuery: String) {
+        val searchQuery = "%$labelSearchQuery%"
+
+        noteViewModel.searchLabel(searchQuery).observe(viewLifecycleOwner) { list ->
+            list?.let {
+                labelSelectAdapter.submitList(it)
+            }
+        }
     }
 
 }

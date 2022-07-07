@@ -9,6 +9,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -24,7 +25,7 @@ import com.example.noteapp.databinding.FragmentMainBinding
 import com.example.noteapp.ui.animation.startAnimation
 import com.google.android.material.navigation.NavigationView
 
-class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
+class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
@@ -207,6 +208,14 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         }
         binding.drawerLayout.close()
         return true
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        TODO("Not yet implemented")
     }
 
 }

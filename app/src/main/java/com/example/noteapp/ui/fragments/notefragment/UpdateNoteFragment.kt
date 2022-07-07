@@ -14,8 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.noteapp.BaseApplication
 import com.example.noteapp.R
+import com.example.noteapp.adapter.recyclerview.labeladapter.LabelSelectAdapter
 import com.example.noteapp.adapter.recyclerview.noteadapter.MiniLabelAdapter
-import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.databinding.FragmentUpdateNoteBinding
 import com.example.noteapp.ui.fragments.NoteViewModel
@@ -42,6 +42,7 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private var pinStatus: Boolean = false
 
     private lateinit var miniLabelAdapter: MiniLabelAdapter
+    private lateinit var labelSelectAdapter: LabelSelectAdapter
 
 
     override fun onCreateView(
@@ -51,7 +52,9 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         pinStatus = navArgs.note.pinned
         bgColor = navArgs.note.bgColor
         miniLabelAdapter = MiniLabelAdapter()
+        labelSelectAdapter = LabelSelectAdapter(noteViewModel)
         _binding = FragmentUpdateNoteBinding.inflate(inflater, container, false)
+        noteViewModel.saveSelectedLabels(navArgs.note.label)
         return binding.root
     }
 
@@ -66,12 +69,15 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-
+        noteViewModel.clearSelectedLabels()
+        Log.i("add_note_fragment","onDestroy is triggered")
     }
 
     private fun setListeners() {
         binding.save.setOnClickListener {
             saveNote()
+            val action = UpdateNoteFragmentDirections.actionUpdateNoteFragmentToMainFragment()
+            findNavController().navigate(action)
         }
 
         binding.bgSelector.setOnClickListener {
@@ -110,7 +116,7 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             timeStamp = Date(),
             bgColor = bgColor,
             pinned = pinStatus,
-            label = arrayListOf<Label>()
+            label = noteViewModel.selectedLabels
         )
         noteViewModel.saveNote(note)
     }
@@ -161,6 +167,10 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
+//    private fun checkLabel(){
+//        labelSelectAdapter.labelCheck()
+//    }
+
     private fun setupMiniLabelAdapter() {
         Log.i("add_note_fragment", "${noteViewModel.selectedLabels}")
         binding.labelRv.adapter = miniLabelAdapter
@@ -169,7 +179,7 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         if (navArgs.note.label.isEmpty()) {
             binding.labelRv.visibility = View.GONE
         } else {
-            miniLabelAdapter.submitList(navArgs.note.label)
+            miniLabelAdapter.submitList(navArgs.note.label.toList())
             binding.labelRv.visibility = View.VISIBLE
         }
     }
@@ -177,7 +187,11 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.delete -> deleteNote(navArgs.note)
-            R.id.labels -> Toast.makeText(requireContext(), "Labels", Toast.LENGTH_SHORT).show()
+            R.id.labels -> {
+                val action =
+                    UpdateNoteFragmentDirections.actionUpdateNoteFragmentToLabelSelectionFragment()
+                findNavController().navigate(action)
+            }
         }
         return true
     }

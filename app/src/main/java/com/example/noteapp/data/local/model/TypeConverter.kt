@@ -36,15 +36,15 @@ class TypeConverter {
     }
 
     @TypeConverter
-    fun fromStringToArrayList(value: String): ArrayList<Label> {
-        val listType = object : TypeToken<ArrayList<Label>>() {}.type
-        Log.e("TypeConverter", "String to Label -> Conversion is made")
-        return gson.fromJson(value, listType)
+    fun fromMutableSetToString(list: MutableSet<Label>): String {
+        return gson.toJson(list)
     }
 
     @TypeConverter
-    fun fromArrayListToString(list: ArrayList<Label>): String {
-        return gson.toJson(list)
+    fun fromStringToMutableSet(value: String): MutableSet<Label> {
+        val listType = object : TypeToken<MutableSet<Label>>() {}.type
+        Log.e("TypeConverter", "String to Label -> Conversion is made")
+        return gson.fromJson(value, listType)
     }
 
 }

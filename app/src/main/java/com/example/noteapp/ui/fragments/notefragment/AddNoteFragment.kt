@@ -10,11 +10,13 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.noteapp.BaseApplication
 import com.example.noteapp.R
 import com.example.noteapp.adapter.recyclerview.ImageAdapter
+import com.example.noteapp.adapter.recyclerview.labeladapter.LabelSelectAdapter
 import com.example.noteapp.adapter.recyclerview.noteadapter.MiniLabelAdapter
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.databinding.FragmentAddNoteBinding
@@ -37,7 +39,7 @@ class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private var bgColor = Color.parseColor("#FFFFFF")
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
-    private var bottomSheetStatus = false
+//    private var bottomSheetStatus = false
     private lateinit var imageAdapter: ImageAdapter
     private lateinit var miniLabelAdapter: MiniLabelAdapter
     private var pinStatus = false
@@ -79,6 +81,8 @@ class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private fun setListeners() {
         binding.save.setOnClickListener {
             saveNote()
+            val action = AddNoteFragmentDirections.actionAddNoteFragmentToMainFragment()
+            findNavController().navigate(action)
         }
 
         binding.bgSelector.setOnClickListener {
@@ -155,7 +159,7 @@ class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         if (noteViewModel.selectedLabels.isEmpty()) {
             binding.labelRv.visibility = View.GONE
         } else {
-            miniLabelAdapter.submitList(noteViewModel.selectedLabels)
+            miniLabelAdapter.submitList(noteViewModel.selectedLabels.toList())
             binding.labelRv.visibility = View.VISIBLE
         }
     }
@@ -184,11 +188,13 @@ class AddNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onStop() {
         super.onStop()
-        noteViewModel.clearSelectedLabels()
+        Log.i("add_note_fragment","onStop is triggered")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        noteViewModel.clearSelectedLabels()
+        Log.i("add_note_fragment","onDestroy is triggered")
     }
 }

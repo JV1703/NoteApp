@@ -17,7 +17,7 @@ data class Note(
     val timeStamp: Date?,
     val reminder: Date? = null,
     val pinned: Boolean,
-    val label: @RawValue ArrayList<Label>,
+    val label: @RawValue MutableSet<Label>,
     var bgColor: Int
 ) : Parcelable
 

@@ -43,11 +43,14 @@ interface NoteDao {
     fun getLabels(): Flow<List<Label>>
 
     @Transaction
-    @Query("SELECT * FROM Note where noteId = :noteId")
+    @Query("SELECT * FROM Note WHERE noteId = :noteId")
     fun getLabelsOfNote(noteId: Long): Flow<List<NoteWithLabels>>
 
     @Transaction
-    @Query("SELECT * FROM Label where labelId = :labelId")
+    @Query("SELECT * FROM Label WHERE labelId = :labelId")
     fun getNotesOfLabel(labelId: Long): Flow<List<LabelWithNotes>>
+
+    @Query("SELECT * FROM Label WHERE labelName LIKE :labelSearchQuery")
+    fun searchLabel(labelSearchQuery: String): Flow<List<Label>>
 
 }
