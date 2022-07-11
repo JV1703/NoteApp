@@ -2,12 +2,10 @@ package com.example.noteapp.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -19,13 +17,14 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.noteapp.BaseApplication
 import com.example.noteapp.R
 import com.example.noteapp.adapter.recyclerview.NotesAdapter
+import com.example.noteapp.adapter.recyclerview.labeladapter.NavViewLabelAdapter
 import com.example.noteapp.adapter.recyclerview.noteadapter.NoteAdapter
 import com.example.noteapp.adapter.recyclerview.noteadapter.PinnedItemAdapter
 import com.example.noteapp.databinding.FragmentMainBinding
 import com.example.noteapp.ui.animation.startAnimation
-import com.google.android.material.navigation.NavigationView
 
-class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
+class MainFragment : Fragment()/*, NavigationView.OnNavigationItemSelectedListener*/,
+    SearchView.OnQueryTextListener {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
@@ -34,6 +33,7 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
     private lateinit var noteAdapter: NoteAdapter
     private lateinit var pinnedItemAdapter: PinnedItemAdapter
     private lateinit var concatAdapter: ConcatAdapter
+    private lateinit var navViewLabelAdapter: NavViewLabelAdapter
     private val noteViewModel: NoteViewModel by activityViewModels {
         NoteViewModelFactory((activity?.application as BaseApplication).noteDatabase.noteDao())
     }
@@ -48,6 +48,7 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         noteAdapter = NoteAdapter()
         pinnedItemAdapter = PinnedItemAdapter()
         concatAdapter = ConcatAdapter(pinnedItemAdapter, noteAdapter)
+        navViewLabelAdapter = NavViewLabelAdapter()
     }
 
     override fun onCreateView(
@@ -60,11 +61,15 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.navView.setNavigationItemSelectedListener(this)
-
+//        binding.navView.setNavigationItemSelectedListener(this)
         setListeners()
-        setupRecyclerView()
+        setupNoteRecyclerView()
         drawerToggle()
+
+        noteViewModel.allLabel.observe(viewLifecycleOwner) { label ->
+            navViewLabelAdapter.submitList(label)
+            setupNavViewDrawerRv(label.isEmpty())
+        }
 
         noteViewModel.allNotes.observe(viewLifecycleOwner) { data ->
 
@@ -124,11 +129,40 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
             val action = MainFragmentDirections.actionMainFragmentToAddNoteFragment()
             findNavController().navigate(action)
         }
+
+        binding.navViewLayout.navDrawerLabelEdit.setOnClickListener {
+            val action = MainFragmentDirections.actionMainFragmentToLabelFragment()
+            findNavController().navigate(action)
+        }
+
+        binding.navViewLayout.navDrawerNewLabel.setOnClickListener {
+            val action = MainFragmentDirections.actionMainFragmentToLabelFragment()
+            findNavController().navigate(action)
+        }
     }
 
-    private fun setupRecyclerView() {
+    private fun setupNoteRecyclerView() {
         binding.notesRecyclerView.adapter = notesAdapter
         chooseRecyclerViewLayout()
+    }
+
+    private fun setupNavViewDrawerRv(isLabelEmpty: Boolean) {
+        binding.navViewLayout.navDrawerRv.adapter = navViewLabelAdapter
+        if (isLabelEmpty) {
+            binding.navViewLayout.navDrawerLabel.visibility = View.GONE
+            binding.navViewLayout.navDrawerLabelEdit.visibility = View.GONE
+            binding.navViewLayout.helperViewTop.visibility = View.GONE
+            binding.navViewLayout.helperViewBottom.visibility = View.GONE
+            binding.navViewLayout.navDrawerRv.visibility = View.GONE
+            binding.navViewLayout.navDrawerNewLabel.visibility = View.VISIBLE
+        } else {
+            binding.navViewLayout.navDrawerLabel.visibility = View.VISIBLE
+            binding.navViewLayout.navDrawerLabelEdit.visibility = View.VISIBLE
+            binding.navViewLayout.helperViewTop.visibility = View.VISIBLE
+            binding.navViewLayout.helperViewBottom.visibility = View.VISIBLE
+            binding.navViewLayout.navDrawerRv.visibility = View.VISIBLE
+            binding.navViewLayout.navDrawerNewLabel.visibility = View.GONE
+        }
     }
 
     private fun chooseRecyclerViewLayout() {
@@ -184,31 +218,31 @@ class MainFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         _binding = null
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.notes -> {
-                binding.drawerLayout.close()
-            }
-            R.id.reminder -> {
-                Toast.makeText(requireContext(), "reminder", Toast.LENGTH_SHORT).show()
-            }
-            R.id.labels -> {
-                val action = MainFragmentDirections.actionMainFragmentToLabelFragment()
-                findNavController().navigate(action)
-            }
-            R.id.delete -> {
-                Toast.makeText(requireContext(), "delete", Toast.LENGTH_SHORT).show()
-            }
-            R.id.settings -> {
-                Toast.makeText(requireContext(), "settings", Toast.LENGTH_SHORT).show()
-            }
-            R.id.help -> {
-                Toast.makeText(requireContext(), "help", Toast.LENGTH_SHORT).show()
-            }
-        }
-        binding.drawerLayout.close()
-        return true
-    }
+//    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.notes -> {
+//                binding.drawerLayout.close()
+//            }
+//            R.id.reminder -> {
+//                Toast.makeText(requireContext(), "reminder", Toast.LENGTH_SHORT).show()
+//            }
+//            R.id.labels -> {
+//                val action = MainFragmentDirections.actionMainFragmentToLabelFragment()
+//                findNavController().navigate(action)
+//            }
+//            R.id.delete -> {
+//                Toast.makeText(requireContext(), "delete", Toast.LENGTH_SHORT).show()
+//            }
+//            R.id.settings -> {
+//                Toast.makeText(requireContext(), "settings", Toast.LENGTH_SHORT).show()
+//            }
+//            R.id.help -> {
+//                Toast.makeText(requireContext(), "help", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//        binding.drawerLayout.close()
+//        return true
+//    }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         TODO("Not yet implemented")

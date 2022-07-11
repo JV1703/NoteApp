@@ -21,7 +21,9 @@
 
     <item android:title="Labels">
         <menu>
-            <group android:checkableBehavior="single">
+            <group
+                android:id="@+id/label_group"
+                android:checkableBehavior="single">
 
                 <item
                     android:id="@+id/labels"

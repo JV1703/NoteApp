@@ -4,6 +4,6 @@
 
     <corners android:radius="8dp" />
     <stroke android:color="@color/black" />
-    <solid android:color="#B3FFFFFF" />
+    <solid android:color="@color/note_bg_yellow" />
 
 </shape>

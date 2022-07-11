@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="label"
+            type="com.example.noteapp.data.local.model.Label" />
+
+    </data>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="12dp"
+        android:paddingVertical="6dp"
+        android:text="@{label.labelName}"
+        app:drawableStartCompat="@drawable/ic_label_no_fill"
+        tools:text="Test 1" />
+</layout>
