@@ -7,32 +7,24 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.noteapp.BaseApplication
 import com.example.noteapp.R
 import com.example.noteapp.adapter.recyclerview.NotesAdapter
 import com.example.noteapp.adapter.recyclerview.labeladapter.NavViewLabelAdapter
-import com.example.noteapp.adapter.recyclerview.noteadapter.NoteAdapter
-import com.example.noteapp.adapter.recyclerview.noteadapter.PinnedItemAdapter
 import com.example.noteapp.databinding.FragmentMainBinding
 import com.example.noteapp.ui.animation.startAnimation
 
-class MainFragment : Fragment()/*, NavigationView.OnNavigationItemSelectedListener*/,
-    SearchView.OnQueryTextListener {
+class MainFragment : Fragment()/*, NavigationView.OnNavigationItemSelectedListener*/ {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var notesAdapter: NotesAdapter
-    private lateinit var noteAdapter: NoteAdapter
-    private lateinit var pinnedItemAdapter: PinnedItemAdapter
-    private lateinit var concatAdapter: ConcatAdapter
     private lateinit var navViewLabelAdapter: NavViewLabelAdapter
     private val noteViewModel: NoteViewModel by activityViewModels {
         NoteViewModelFactory((activity?.application as BaseApplication).noteDatabase.noteDao())
@@ -45,9 +37,6 @@ class MainFragment : Fragment()/*, NavigationView.OnNavigationItemSelectedListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         notesAdapter = NotesAdapter()
-        noteAdapter = NoteAdapter()
-        pinnedItemAdapter = PinnedItemAdapter()
-        concatAdapter = ConcatAdapter(pinnedItemAdapter, noteAdapter)
         navViewLabelAdapter = NavViewLabelAdapter()
     }
 
@@ -61,7 +50,6 @@ class MainFragment : Fragment()/*, NavigationView.OnNavigationItemSelectedListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        binding.navView.setNavigationItemSelectedListener(this)
         setListeners()
         setupNoteRecyclerView()
         drawerToggle()
@@ -73,15 +61,10 @@ class MainFragment : Fragment()/*, NavigationView.OnNavigationItemSelectedListen
 
         noteViewModel.allNotes.observe(viewLifecycleOwner) { data ->
 
-//            noteAdapter.pinnedSorting(data, isGridLayoutManager)
-//            pinnedItemAdapter.pinnedSorting(data, isGridLayoutManager)
-
             notesAdapter.submitList(data)
 
             binding.viewType.setOnClickListener {
                 isGridLayoutManager = !isGridLayoutManager
-//                noteAdapter.pinnedSorting(data, isGridLayoutManager)
-//                pinnedItemAdapter.pinnedSorting(data, isGridLayoutManager)
                 chooseRecyclerViewLayout()
                 chooseLayoutIcon()
             }
@@ -243,13 +226,4 @@ class MainFragment : Fragment()/*, NavigationView.OnNavigationItemSelectedListen
 //        binding.drawerLayout.close()
 //        return true
 //    }
-
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        TODO("Not yet implemented")
-    }
-
 }

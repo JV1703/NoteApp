@@ -16,6 +16,7 @@ import com.example.noteapp.BaseApplication
 import com.example.noteapp.R
 import com.example.noteapp.adapter.recyclerview.labeladapter.LabelSelectAdapter
 import com.example.noteapp.adapter.recyclerview.noteadapter.MiniLabelAdapter
+import com.example.noteapp.data.local.model.Label
 import com.example.noteapp.data.local.model.Note
 import com.example.noteapp.databinding.FragmentUpdateNoteBinding
 import com.example.noteapp.ui.fragments.NoteViewModel
@@ -62,7 +63,9 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         loadNote()
         setListeners()
-        setupMiniLabelAdapter()
+        noteViewModel.allLabel.observe(viewLifecycleOwner) { labels ->
+            setupMiniLabelAdapter(dbLabel = labels.toMutableSet(), navArgLabel = navArgs.note.label)
+        }
         binding.note = navArgs.note
     }
 
@@ -70,7 +73,7 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         super.onDestroy()
         _binding = null
         noteViewModel.clearSelectedLabels()
-        Log.i("add_note_fragment","onDestroy is triggered")
+        Log.i("update_note_fragment", "onDestroy is triggered")
     }
 
     private fun setListeners() {
@@ -167,21 +170,37 @@ class UpdateNoteFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
     }
 
-//    private fun checkLabel(){
-//        labelSelectAdapter.labelCheck()
-//    }
-
-    private fun setupMiniLabelAdapter() {
-        Log.i("add_note_fragment", "${noteViewModel.selectedLabels}")
+    private fun setupMiniLabelAdapter(
+        dbLabel: MutableSet<Label>,
+        navArgLabel: MutableSet<Label>
+    ) {
         binding.labelRv.adapter = miniLabelAdapter
         val layoutManager = FlexboxLayoutManager(requireContext(), FlexDirection.ROW, FlexWrap.WRAP)
         binding.labelRv.layoutManager = layoutManager
         if (navArgs.note.label.isEmpty()) {
             binding.labelRv.visibility = View.GONE
         } else {
-            miniLabelAdapter.submitList(navArgs.note.label.toList())
+            miniLabelAdapter.submitList(labelCheck(dbLabel = dbLabel, navArgLabel = navArgLabel))
             binding.labelRv.visibility = View.VISIBLE
         }
+    }
+
+    private fun labelCheck(
+        dbLabel: MutableSet<Label>,
+        navArgLabel: MutableSet<Label>
+    ): List<Label> {
+        var result: MutableSet<Label> = mutableSetOf()
+        if (dbLabel == navArgLabel) {
+            result = navArgLabel
+        } else {
+            navArgLabel.forEach { label ->
+                if (dbLabel.contains(label)) {
+                    result.add(label)
+                }
+            }
+        }
+        noteViewModel.saveSelectedLabels(result)
+        return result.toList()
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
